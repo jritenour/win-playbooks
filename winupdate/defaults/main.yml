@@ -1,0 +1,4 @@
+---
+# defaults file for winupdate
+win_update_cat_names: ['CriticalUpdates','SecurityUpdates']
+win_update_reboot: false

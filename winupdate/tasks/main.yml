@@ -1,0 +1,14 @@
+---
+# tasks file for winupdate
+- name: "Install updates"
+  win_updates:
+    category_names: "{{ win_update_cat_names }}"
+    log_path: c:\answinup.txt
+  register: win_update_results
+  failed_when: win_update_results.failed is defined and win_update_results.failed and win_update_reboot == False
+
+- name: "Reboot if required."
+  win_reboot:
+    shutdown_timeout_sec: 300
+    reboot_timeout_sec: 300
+  when: win_update_results.reboot_required is defined and win_update_results.reboot_required == True and win_update_reboot
