@@ -1,0 +1,3 @@
+- hosts: all
+  roles:
+    - { role: bahaula.win_sqlexpress2014 }
