@@ -10,6 +10,10 @@
         include_sub_features: True
         include_management_tools: True
 
+    - name: Pause for module refresh
+      pause:
+        seconds: 5
+
     - name: Import IIS Module
       win_shell: Import-Module WebAdministration
 

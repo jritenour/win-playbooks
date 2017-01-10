@@ -6,7 +6,7 @@ This is a collection of Ansible playbooks/roles that I wrote (with the exception
 
 This role is pretty self explanatory - this will install windows updates on the host you run it against.  Be advised that it will take a VERY LONG TIME to do this on a host with a clean install of Windows that has had no prior updates installed, so take that into consideration
 
-You can use the extra variable "win_update_cate_names", with choices in an array, like so: 
+You can use the extra variable "win_updat_cate_names", with choices in an array, like so: 
 
 win_update_cat_names: ['CriticalUpdates','SecurityUpdates']
 
@@ -36,4 +36,4 @@ This requires the bahaula.win_sqlexpress2014 role from Ansible Galaxy.  This rol
 
 ## iisplay.yml
 
-This is a simple playbook to enable IIS on a host.  I'll eventually develop this into a role and provide more configuration options. Current, it accepts "hostname" and "appool" variables.
+This is a simple playbook to enable IIS on a host.  I'll eventually develop this into a role and provide more configuration options. Current, it accepts "hostname" and "appool" variables. Ihave also added a 5 second pause between enabling the Web-Server role and importing the WebAdministration module to mitigate a possible race condition where the installed powershell modules hasn't refreshed after installation in the previous step.  
