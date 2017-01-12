@@ -33,3 +33,14 @@
         physical_path: 'c:\sites\cfans'
         parameters: 'logfile.directory:c:\sites\logs'
       register: website
+ 
+    - name: Firewall rule to allow smtp on TCP port 25
+      action: win_firewall_rule
+      args:
+        name: http
+        enable: yes
+        state: present
+        localport: 80
+        action: allow
+        direction: In
+        protocol: TCP
