@@ -1,7 +1,7 @@
 ---
 - hosts: all
   tasks:
-    - name: Ensure user bob is present
+    - name: Ensure user '{{ username }}' is present
       win_user:
         name: '{{ username }} '
         password: '{{ password }}'
