@@ -9,6 +9,6 @@
 
 - name: "Reboot if required."
   win_reboot:
-    shutdown_timeout_sec: 300
-    reboot_timeout_sec: 300
+    shutdown_timeout_sec: 600
+    reboot_timeout_sec: 600
   when: win_update_results.reboot_required is defined and win_update_results.reboot_required == True and win_update_reboot
