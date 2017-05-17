@@ -19,7 +19,7 @@
 
     - name: Create site directory
       win_file:
-        path: 'C:\sites\cfans\'
+        path: "{{ path }}"
         state: directory
 
 
@@ -30,7 +30,7 @@
         port: 80
         hostname: "{{ hostname }}"
         application_pool: "{{ appool }}"
-        physical_path: 'c:\sites\cfans'
+        physical_path: "{{ path }}"
         parameters: 'logfile.directory:c:\sites\logs'
       register: website
  
