@@ -6,7 +6,7 @@ This is a collection of Ansible playbooks/roles that I wrote (with the exception
 
 This role is pretty self explanatory - this will install windows updates on the host you run it against.  Be advised that it will take a VERY LONG TIME to do this on a host with a clean install of Windows that has had no prior updates installed, so take that into consideration
 
-You can use the extra variable "win_updat_cate_names", with choices in an array, like so: 
+You can use the extra variable "win_updat_cat_names", with choices in an array, like so: 
 
 win_update_cat_names: ['CriticalUpdates','SecurityUpdates']
 
