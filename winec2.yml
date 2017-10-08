@@ -16,7 +16,6 @@
     ansible_password: "{{ win_pass }}"
     ansible_port: 5986
     ansible_connection: winrm
-    ansible_winrm_server_cert_validation: ignore
 
 #  roles: 
 #    - {role: 'roles/jritenour.cf-miq-db'}
@@ -53,7 +52,7 @@
         parameters: 'logfile.directory:c:\sites\logs'
       register: website
 
-    - name: Firewall rule to allow smtp on TCP port 25
+    - name: Firewall rule to allow HTTP traffic on port 80
       action: win_firewall_rule
       args:
         name: http
