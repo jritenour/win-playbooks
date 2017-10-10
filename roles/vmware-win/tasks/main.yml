@@ -32,15 +32,19 @@
     delegate_to: localhost
     register: deploy
 
-  - name: Debugging instance info
-    debug:
-      var: deploy.instance.hw_eth0.ipaddresses[0]
-
   - name: add Windows server to inventory
     add_host:
-      hostname: "{{ db_server }}"
+      hostname: "{{ ip_addr }}"
       ansible_ssh_user: Administrator
       ansible_ssh_pass: "{{ win_pass }}"
-      ansible_port=5985
-      ansible_connection=winrm
+      ansible_port: 5985
+      ansible_connection: winrm
       groupname: windows
+
+  - name: wait for instance become ready to use
+    wait_for:
+      port: "3389"
+      host: "{{ ip_addr }}"
+      delay: "60"
+      timeout: "600"
+      state: "started"

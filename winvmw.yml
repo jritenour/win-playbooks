@@ -1,0 +1,64 @@
+---
+- hosts: localhost
+  gather_facts: no
+  connection: local
+  remote_user: root
+  vars_files:
+    - '../vmw.yml'
+  roles:
+    - {role: 'roles/vmware-win'}
+
+- hosts: windows
+  vars_files:
+    - '../vmw.yml'
+  vars:
+    ansible_user: "{{ win_user }}"
+    ansible_password: "{{ win_pass }}"
+    ansible_port: 5985
+    ansible_connection: winrm
+
+#  roles: 
+#    - {role: 'roles/jritenour.cf-miq-db'}
+  tasks:
+    - name: Install IIS Web-Server with sub features and management tools
+      win_feature:
+        name: Web-Server
+        state: present
+        restart: True
+        include_sub_features: True
+        include_management_tools: True
+
+    - name: Pause for module refresh
+      pause:
+        seconds: 5
+
+    - name: Import IIS Module
+      win_shell: Import-Module WebAdministration
+
+    - name: Create site directory
+      win_file:
+        path: "{{ path }}"
+        state: directory
+
+
+    - name: CF Ansible IIS site
+      win_iis_website:
+        name: "CF Ansible"
+        state: started
+        port: 80
+        hostname: "{{ hostname }}"
+        application_pool: "{{ appool }}"
+        physical_path: "{{ path }}"
+        parameters: 'logfile.directory:c:\sites\logs'
+      register: website
+
+    - name: Firewall rule to allow HTTP traffic on port 80
+      action: win_firewall_rule
+      args:
+        name: http
+        enable: yes
+        state: present
+        localport: 80
+        action: allow
+        direction: In
+        protocol: TCP
