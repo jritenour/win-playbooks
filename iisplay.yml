@@ -1,6 +1,5 @@
 ---
 - hosts: all
-  remote_user: root
   tasks:
     - name: Install IIS Web-Server with sub features and management tools
       win_feature:
