@@ -28,6 +28,7 @@
         dns_servers:
         - "{{ dns1 }}"
         - "{{ dns2 }}"
+        password: "{{ win_pass }}"
       wait_for_ip_address: yes
     delegate_to: localhost
     register: deploy
