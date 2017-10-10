@@ -3,14 +3,14 @@
   gather_facts: no
   connection: local
   remote_user: root
-  vars_files:
-    - '../vmw.yml'
+#  vars_files:
+#    - '../vmw.yml'
   roles:
     - {role: 'roles/vmware-win'}
 
 - hosts: windows
-  vars_files:
-    - '../vmw.yml'
+#  vars_files:
+#    - '../vmw.yml'
   vars:
     ansible_user: "{{ win_user }}"
     ansible_password: "{{ win_pass }}"
