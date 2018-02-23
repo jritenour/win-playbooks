@@ -9,5 +9,5 @@
         groups:
           - Users
           - Administrators
-       password_never_expires: yes
-       update_password: always
+        password_never_expires: yes
+        update_password: always
