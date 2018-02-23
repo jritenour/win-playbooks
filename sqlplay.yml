@@ -1,4 +1,4 @@
 ---
-- hosts: all
+- hosts: windows
   roles:
     - { role: bahaula.win_sqlexpress2014 }
