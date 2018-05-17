@@ -1,5 +1,18 @@
 ---
 - hosts: win
   tasks:
-    - name: test windows python call
-      win_command: 'c:\pstools\psexec.exe -i 1 -s C:\Users\ansible\AppData\Local\Programs\Python\Python37\python.exe C:\Users\ansible\mspaintstart.py'
+    - name: Download the shadowman graphic
+      win_get_url:
+        url: https://regmedia.co.uk/2012/06/21/red_hat_shadowman_logo.jpg
+        dest: C:\red_hat_shadowman_logo.jpg
+    - name: Copy the pywinautoscript file
+      win_copy:
+        src: winpython/mspaintstart.py
+        dest: C:\Users\ansible\mspaintstart.py
+    - name: Resize graphic using MS Paint
+     # win_command: c:\pstools\psexec.exe -i 1 -s C:\Users\ansible\AppData\Local\Programs\Python\Python37\python.exe C:\Users\ansible\mspaintstart.py
+      win_psexec:
+        executable: c:\pstools\psexec.exe
+        command: 'C:/Users/ansible/AppData/Local/Programs/Python/Python37/python.exe C:\Users\ansible\mspaintstart.py'
+        interactive: yes
+        system: yes
