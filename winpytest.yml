@@ -10,9 +10,9 @@
         src: winpython/mspaintstart.py
         dest: C:\Users\ansible\mspaintstart.py
     - name: Resize graphic using MS Paint
-     # win_command: c:\pstools\psexec.exe -i 1 -s C:\Users\ansible\AppData\Local\Programs\Python\Python37\python.exe C:\Users\ansible\mspaintstart.py
-      win_psexec:
-        executable: c:\pstools\psexec.exe
-        command: 'C:/Users/ansible/AppData/Local/Programs/Python/Python37/python.exe C:\Users\ansible\mspaintstart.py'
-        interactive: yes
-        system: yes
+      win_command: c:\pstools\psexec.exe -i 2 -s C:\Users\ansible\AppData\Local\Programs\Python\Python37\python.exe C:\Users\ansible\mspaintstart.py
+     # win_psexec:
+     #   executable: c:\pstools\psexec.exe
+     #   command: 'C:Users\ansible\AppData\Local\Programs\Python\Python37\python.exe C:\Users\ansible\mspaintstart.py'
+     #   interactive: yes
+     #   system: yes
