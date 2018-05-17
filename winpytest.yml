@@ -1,0 +1,5 @@
+---
+- hosts: win
+  tasks:
+    - name: test windows python call
+      win_command: 'c:\pstools\psexec.exe -i 1 -s C:\Users\ansible\AppData\Local\Programs\Python\Python37\python.exe C:\Users\ansible\mspaintstart.py'

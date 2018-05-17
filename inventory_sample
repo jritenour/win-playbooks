@@ -1,0 +1,2 @@
+[win]
+192.168.2.153 ansible_user=ansible  ansible_password='xxx' ansible_port=5985 ansible_connection=winrm
