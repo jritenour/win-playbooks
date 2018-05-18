@@ -1,7 +1,10 @@
 ---
 # tasks file for winuidemo
   - name: Enable SNMP feature
-    win_command: c:\pstools\psexec.exe -i 1 -s  PowerShell Enable-WindowsOptionalFeature -Online -FeatureName SNMP
+    win_feature:
+      name: SNMP-Service
+      state: present
+
   - name: Configure registry items
     win_regedit:
       path: '{{ item.path }}'
@@ -26,11 +29,11 @@
       data: 0
    
     # SNMP community string
-    - path: HKLM\SYSTEM\CurrentControlSet\Services\SNMP\Parameters
+    - path: HKLM:\SYSTEM\CurrentControlSet\Services\SNMP\Parameters
       name: ROCommunity
       data: 0x4
     
-    - path: HKLM\SYSTEM\CurrentControlSet\Services\SNMP\Parameters
+    - path: HKLM:\SYSTEM\CurrentControlSet\Services\SNMP\Parameters
       name: 1
       type: string
       data: snmphost1
