@@ -2,8 +2,11 @@
 # tasks file for winuidemo
   - name: Enable SNMP feature
     win_feature:
-      name: SNMP-Service
+      name:  "{{ item }}"
       state: present
+    with_items:
+      - SNMP-Service
+      - RSAT-SNMP
 
   - name: Configure registry items
     win_regedit:
@@ -29,11 +32,11 @@
       data: 0
    
     # SNMP community string
-    - path: HKLM:\SYSTEM\CurrentControlSet\Services\SNMP\Parameters
+    - path: HKLM:\SYSTEM\CurrentControlSet\Services\SNMP\Parameters\ValidCommunities
       name: ROCommunity
       data: 0x4
     
-    - path: HKLM:\SYSTEM\CurrentControlSet\Services\SNMP\Parameters
+    - path: HKLM:\SYSTEM\CurrentControlSet\Services\SNMP\Parameters\PermittedManagers
       name: 1
       type: string
       data: snmphost1
