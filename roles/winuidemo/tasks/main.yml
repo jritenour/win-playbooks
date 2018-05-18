@@ -1,0 +1,44 @@
+---
+# tasks file for winuidemo
+  - name: Enable SNMP feature
+    win_command: c:\pstools\psexec.exe -i 1 -s  PowerShell Enable-WindowsOptionalFeature -Online -FeatureName SNMP
+  - name: Configure registry items
+    win_regedit:
+      path: '{{ item.path }}'
+      name: '{{ item.name }}'
+      data: '{{ item.data|default(None) }}'
+      type: '{{ item.type|default("dword") }}'
+      state: '{{ item.state|default("present") }}'
+    with_items:
+    # Show hidden files and folders
+    - path: HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
+      name: Hidden
+      data: 1
+
+    # Hide file extensions
+    - path: HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
+      name: HideFileExt
+      data: 1
+
+    # Show hidden Operating System files
+    - path: HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
+      name: ShowSuperHidden
+      data: 0
+   
+    # SNMP community string
+    - path: HKLM\SYSTEM\CurrentControlSet\Services\SNMP\Parameters
+      name: ROCommunity
+      data: 0x4
+    
+    - path: HKLM\SYSTEM\CurrentControlSet\Services\SNMP\Parameters
+      name: 1
+      type: string
+      data: snmphost1
+
+  - name: Disable firewall profiles
+    win_firewall:
+      state: disabled
+      profiles:
+      - Domain
+      - Private
+      - Public
