@@ -1,0 +1,35 @@
+---
+# tasks file for ad-controller
+  - name: Wait 600 seconds for target connection to become reachable/usable
+    wait_for_connection:
+
+  - name: Gather facts
+    setup:
+
+  - name: install Active Directory services
+    win_feature:
+      name: AD-Domain-Services
+      include_management_tools: yes
+      include_sub_features: yes
+      state: present
+
+  - name: reset local admin password
+    win_user:
+      name: Administrator
+      password: "{{ domain_pw }}"
+      update_password: always
+      state: present
+
+  - name: import AD DS PS module
+    win_psmodule:
+      name: ADDSDeployment
+      state: present
+
+  - name: configure as Domain Controller
+    win_shell:   Install-ADDSForest -DomainName "{{ domain_name }}" -SafeModeAdministratorPassword (ConvertTo-SecureString "{{ safe_pw }}" -AsPlainText -Force) -InstallDns:$true  -NoRebootOnCompletion:$true -Confirm:$false
+
+  - name: Reboot promoted domain controller
+    raw: shutdown /r
+    async: 0
+    poll: 0
+    ignore_errors: true

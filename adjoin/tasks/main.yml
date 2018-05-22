@@ -1,9 +1,0 @@
----
-# tasks file for adjoin
-- name: "Join Active Directory domain"
-  win_shell: add-computer -domainname "{{ domain }}" -credential (New-Object System.Management.Automation.PSCredential ("{{ user }}", (ConvertTo-SecureString "{{ password }}" -AsPlainText -Force)))
-  register: adjoin_result
-  
-- name: "Reboot"
-  win_reboot:
-  when: adjoin_result.changed

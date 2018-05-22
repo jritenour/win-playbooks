@@ -3,4 +3,4 @@
   connection: local
   gather_facts: no
   roles:
-    - {role: 'buildrhv'}
+    - {role: 'rhvwindows'}

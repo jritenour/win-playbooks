@@ -1,2 +1,34 @@
 ---
 # tasks file for rhvwindows
+ - name: Authenticate to RHV-M
+   ovirt_auth:
+     url: "https://{{ rhvm_addr }}/ovirt-engine/api"
+     username: "{{ rhv_user }}"
+     password: "{{ rhv_pass }}" 
+     insecure: true
+
+ - name: create the VM
+   ovirt_vms: 
+     auth: "{{ ovirt_auth }}"
+     state: running
+     name: "{{ vm_name }}"
+     cluster: "{{ cluster }}"
+     wait: True
+     template: "{{ template_name }}"
+     sysprep:
+         host_name: "{{ vm_name }}"
+         user_name: Administrator
+         root_password: "{{ admin_pw }}"
+         timezone: 'US Eastern Standard Time'
+
+ - name: Tag VM as 'provsioning'
+   ovirt_tags:
+     auth: "{{ ovirt_auth }}"
+     name: provisioning
+     state: attached
+     vms: 
+       - "{{ vm_name }}"
+
+ - name: Wait for IP
+   pause: 
+     seconds: 30

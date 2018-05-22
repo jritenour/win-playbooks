@@ -1,0 +1,23 @@
+---
+# tasks file for ad-client
+  - name: Wait 600 seconds for target connection to become reachable/usable
+    wait_for_connection:
+
+  - name: configure Windows DNS
+    win_dns_client:
+      adapter_names: "*"
+      ipv4_addresses:
+       - "{{ dc_ip }}"
+  - name: Debug DNS servers
+    win_shell: "ipconfig /all"
+  - name: Join "{{ domain_name }}" Domain
+    win_domain_membership:
+      dns_domain_name: "{{ domain_name }}"
+      domain_admin_user: "{{ domain_user }}"
+      domain_admin_password: "{{ domain_pw }}"
+      state: domain
+    register: adjoin_result
+
+  - name: "Reboot"
+    win_reboot:
+    when: adjoin_result.changed

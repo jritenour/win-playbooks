@@ -1,9 +1,0 @@
----
-- hosts: all
-  tasks:
-  - win_shell: "Get-WindowsOptionalFeature -FeatureName SNMP -Online| findstr Enabled"
-    register: result
-    ignore_errors: yes
-  - debug:
-      msg:  "SNMP is already installed"
-    when: '"Enable" in result.stdout_lines'
