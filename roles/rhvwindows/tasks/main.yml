@@ -21,6 +21,35 @@
          root_password: "{{ admin_pw }}"
          timezone: 'US Eastern Standard Time'
 
+ - name: List vms
+   ovirt_vms_facts:
+     auth: "{{ ovirt_auth }}"
+     pattern: name="{{ vm_name }}"
+
+ - name: Get VM API info
+   uri:
+     url: "https://{{ rhvm_addr }}{{ item.href }}/reporteddevices"
+     method: GET
+     return_content: yes
+     user: "{{ rhv_user }}"
+     password: "{{ rhv_pass }}"
+     validate_certs: no
+     body_format: raw
+     headers:
+       Accept: application/json
+   with_items: "{{ ovirt_vms }}"
+   register: vmapi
+
+ - name: add  server to inventory
+   add_host:
+     hostname: "{{ item.json.reported_device[0].ips.ip[0].address }}"
+     ansible_ssh_user: Administrator
+     ansible_ssh_pass: "{{ admin_pw }}"
+     ansible_port: 5985 
+     ansible_connection: winrm
+     groupname: winclients
+   with_items: "{{ vmapi.results }}"
+
  - name: Tag VM as 'provsioning'
    ovirt_tags:
      auth: "{{ ovirt_auth }}"
@@ -29,6 +58,6 @@
      vms: 
        - "{{ vm_name }}"
 
- - name: Wait for IP
+ - name: Wait for Windows build & reboots
    pause: 
-     seconds: 30
+     seconds: 300
