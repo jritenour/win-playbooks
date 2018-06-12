@@ -17,7 +17,7 @@
      template: "{{ template_name }}"
      sysprep:
          host_name: "{{ vm_name }}"
-         user_name: Administrator
+         user_name: ansible
          root_password: "{{ admin_pw }}"
          timezone: 'US Eastern Standard Time'
 

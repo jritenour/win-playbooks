@@ -1,7 +1,0 @@
----
-- import_playbook: rhvbuild.yml
-
-- hosts: winclients
-  roles:
-    - ad-client
-    - winuidemo
