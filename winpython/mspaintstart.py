@@ -49,7 +49,7 @@ dlg.File_tab.click()
 dlg.SaveAsGroup.child_window(title="Save as", found_index=1).invoke()
 dlg.child_window(title='PNG picture', found_index=0).invoke()
 # Type output file name and save
-dlg.SaveAs.File_name_ComboBox.Edit.set_text('shadowman_resized.png')
+dlg.SaveAs.File_name_ComboBox.Edit.set_text('red_hat_shadowman_logo.png')
 dlg.SaveAs.Save.click()
 
 if dlg.ConfirmSaveAs.exists():
