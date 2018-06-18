@@ -15,7 +15,6 @@
       dns_domain_name: "{{ domain_name }}"
       domain_admin_user: "{{ domain_user }}"
       domain_admin_password: "{{ domain_pw }}"
-      hostname: "{{ vm_name }}"
       state: domain
     register: adjoin_result
 
