@@ -1,0 +1,10 @@
+--- 
+- hosts: all
+  tasks:
+  - name: Configure registry items
+    win_regedit:
+      path: HKLM:\Software\Microsoft\Windows\CurrentVersion\policies\system
+      name: EnableLUA
+      data: 1
+
+
