@@ -5,6 +5,8 @@
     ansible_connection: winrm
 
   tasks:
+    - name: cleanup the Pictures directory
+      win_shell: Remove-Item -Path c:\pictures\*
     - name: Download the shadowman graphic
       win_get_url:
         url: https://regmedia.co.uk/2012/06/21/red_hat_shadowman_logo.jpg
