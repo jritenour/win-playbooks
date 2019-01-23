@@ -1,0 +1,68 @@
+---
+- hosts: localhost
+  tasks:
+  - name: Create Resource group
+    azure_rm_resourcegroup:
+      name: Testing
+      location: eastus
+
+  - name: create an account
+    azure_rm_storageaccount:
+      resource_group: Testing
+      name: strgaccnt
+      type: Standard_LRS
+
+  - name: Create container1 
+    azure_rm_storageblob:
+      resource_group: Testing
+      storage_account_name: strgaccnt
+      container: container1
+
+  - name: Create a public ip address
+    azure_rm_publicipaddress:
+      resource_group: Testing
+      name: my_public_ip
+      allocation_method: Static
+      domain_name: jrtestingip
+
+  - name: Create a virtual network
+    azure_rm_virtualnetwork:
+      name: jrnet1
+      resource_group: Testing
+      address_prefixes_cidr:
+          - "10.1.0.0/16"
+      dns_servers:
+          - "8.8.8.8"
+          - "8.8.4.4"
+
+- name: Create a subnet
+  azure_rm_subnet:
+    name: jrsub1
+    virtual_network_name: jrnet1
+    resource_group: Testing
+    address_prefix_cidr: "10.1.0.0/24"
+
+  - name: Create a network interface with private IP address only (no Public IP)
+    azure_rm_networkinterface:
+      name: nic001
+      resource_group: Testing
+      virtual_network: jrnet1
+      subnet_name: jrsub1
+      create_with_security_group: True
+      ip_configurations:
+        - name: ipconfig1
+          public_ip_address_name: my_public_ip
+          primary: True
+
+  - name: Create VM with defaults
+    azure_rm_virtualmachine:
+      resource_group: Testing
+      name: testvm10
+      admin_username: jritenour
+      admin_password: "{{ password }}"
+      image:
+        offer: CentOS
+        publisher: OpenLogic
+        sku: '7.4'
+        version: latest
+      vm_size: Standard_A1
