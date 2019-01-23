@@ -35,14 +35,14 @@
           - "8.8.8.8"
           - "8.8.4.4"
 
-- name: Create a subnet
-  azure_rm_subnet:
-    name: jrsub1
-    virtual_network_name: jrnet1
-    resource_group: Testing
-    address_prefix_cidr: "10.1.0.0/24"
+  - name: Create a subnet
+    azure_rm_subnet:
+      name: jrsub1
+      virtual_network_name: jrnet1
+      resource_group: Testing
+      address_prefix_cidr: "10.1.0.0/24"
 
-  - name: Create a network interface with private IP address only (no Public IP)
+  - name: Create a network interface with public IP
     azure_rm_networkinterface:
       name: nic001
       resource_group: Testing
