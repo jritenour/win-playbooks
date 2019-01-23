@@ -1,0 +1,9 @@
+---
+- hosts: localhost
+  tasks:
+  - name: Create Resource group
+    azure_rm_resourcegroup:
+      name: Testing
+      location: eastus
+      state: absent
+      force: yes
