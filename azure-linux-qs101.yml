@@ -9,13 +9,13 @@
   - name: create an account
     azure_rm_storageaccount:
       resource_group: Testing
-      name: strgaccnt
+      name: jrstrgaccnt
       type: Standard_LRS
 
   - name: Create container1 
     azure_rm_storageblob:
       resource_group: Testing
-      storage_account_name: strgaccnt
+      storage_account_name: jrstrgaccnt
       container: container1
 
   - name: Create a public ip address
