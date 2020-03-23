@@ -8,7 +8,7 @@
      insecure: true
 
  - name: create the VM
-   ovirt_vms: 
+   ovirt_vm: 
      auth: "{{ ovirt_auth }}"
      state: running
      name: "{{ vm_name }}"
@@ -26,7 +26,7 @@
      seconds: 60
 
  - name: List vms
-   ovirt_vms_facts:
+   ovirt_vm_facts:
      auth: "{{ ovirt_auth }}"
      pattern: name="{{ vm_name }}"
 
@@ -55,7 +55,7 @@
    with_items: "{{ vmapi.results }}"
 
  - name: Tag VM as 'provsioning'
-   ovirt_tags:
+   ovirt_tag:
      auth: "{{ ovirt_auth }}"
      name: provisioning
      state: attached
