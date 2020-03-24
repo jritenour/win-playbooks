@@ -1,8 +1,0 @@
----
-- hosts: all
-  tasks:
-  - name: 
-    win_lineinfile:
-      create: yes
-      path: C:\inetpub\wwwroot\index.html
-      line: "You are currently on {{ ansible_ip_addresses[0] }}"
