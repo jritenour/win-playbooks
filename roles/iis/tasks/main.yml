@@ -14,24 +14,13 @@
     - name: Import IIS Module
       win_shell: Import-Module WebAdministration
 
-    - name: Create site directory
-      win_file:
-        path: "{{ path }}"
-        state: directory
+    - name: Create index.html file in default site
+      win_lineinfile:
+        create: yes
+        path: C:\inetpub\wwwroot\index.html
+        line: "You are currently on {{ ansible_ip_addresses[0] }}"
 
-
-    - name: CF Ansible IIS site
-      win_iis_website:
-        name: "CF Ansible"
-        state: started
-        port: 80
-        hostname: "{{ hostname }}"
-        application_pool: "{{ appool }}"
-        physical_path: "{{ path }}"
-        parameters: 'logfile.directory:c:\sites\logs'
-      register: website
-
-    - name: Firewall rule to allow HTTP traffic on port 80
+    - name: Create Windows Firewall rule to allow HTTP traffic on port 80
       action: win_firewall_rule
       args:
         name: http

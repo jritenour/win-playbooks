@@ -57,11 +57,7 @@
  - name: Tag VM as 'provsioning'
    ovirt_tag:
      auth: "{{ ovirt_auth }}"
-     name: provisioning
+     name: windows
      state: attached
      vms: 
        - "{{ vm_name }}"
-
-# - name: Wait for Windows build & reboots
-#   pause: 
-#     seconds: 300
