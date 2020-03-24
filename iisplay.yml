@@ -1,21 +1,5 @@
 ---
-- hosts: localhost
-  connection: local
-  vars: 
-    vm_name: "{{ iisvm1 }}"
-  gather_facts: no
-  roles:
-    - {role: 'rhvwindows'}
-
-- hosts: localhost
-  connection: local
-  vars: 
-    vm_name: "{{ iisvm2 }}"
-  gather_facts: no
-  roles:
-    - {role: 'rhvwindows'}
-    
-- hosts: winclients
+- hosts: all
   vars:
     ansible_user: "{{ win_user }}"
     ansible_password: "{{ win_pass }}"
@@ -25,19 +9,3 @@
 
   roles:
     - {role: 'roles/iis'}
-
-- hosts: haproxy
-  tasks:
-  - name: Configure haproxy
-    blockinfile:
-      path: /etc/haproxy/haproxy.cfg
-      state: present
-      insertafter: EOF
-      block: |
-             server iis1 "{{ hostvars[groups['winclients'][0]]['ansible_ip_addresses'][0] }}":80 check
-             server iis2 "{{ hostvars[groups['winclients'][1]]['ansible_ip_addresses'][0] }}":80 check
-
-  - name: restart haproxy
-    service:
-      name: haproxy
-      state: restarted
