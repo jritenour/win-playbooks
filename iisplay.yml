@@ -1,8 +1,6 @@
 ---
 - hosts: all
   vars:
-    ansible_user: "{{ win_user }}"
-    ansible_password: "{{ win_pass }}"
     ansible_port: 5985
     ansible_connection: winrm
 
