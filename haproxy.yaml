@@ -1,0 +1,16 @@
+---
+- hosts: all
+  tasks:
+  - name: Configure haproxy
+    blockinfile:
+      path: /etc/haproxy/haproxy.cfg
+      state: present
+      insertafter: EOF
+      block: |
+             server iis1 "{{ hostvars[groups['tag_windows'][0]]['ansible_ip_addresses'][0] }}":80 check
+             server iis2 "{{ hostvars[groups['tag_windows'][1]]['ansible_ip_addresses'][0] }}":80 check
+
+  - name: restart haproxy
+    service:
+      name: haproxy
+      state: restarted

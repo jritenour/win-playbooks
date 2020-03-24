@@ -1,45 +1,43 @@
 ---
-- hosts: all
+- hosts: localhost
+  connection: local
+  vars: 
+    vm_name: "{{ iisvm1 }}"
+  gather_facts: no
+  roles:
+    - {role: 'rhvwindows'}
+
+- hosts: localhost
+  connection: local
+  vars: 
+    vm_name: "{{ iisvm2 }}"
+  gather_facts: no
+  roles:
+    - {role: 'rhvwindows'}
+    
+- hosts: winclients
+  vars:
+    ansible_user: "{{ win_user }}"
+    ansible_password: "{{ win_pass }}"
+    ansible_port: 5985
+    ansible_connection: winrm
+
+
+  roles:
+    - {role: 'roles/iis'}
+
+- hosts: haproxy
   tasks:
-    - name: Install IIS Web-Server with sub features and management tools
-      win_feature:
-        name: Web-Server
-        state: present
-        restart: True
-        include_sub_features: True
-        include_management_tools: True
+  - name: Configure haproxy
+    blockinfile:
+      path: /etc/haproxy/haproxy.cfg
+      state: present
+      insertafter: EOF
+      block: |
+             server iis1 "{{ hostvars[groups['winclients'][0]]['ansible_ip_addresses'][0] }}":80 check
+             server iis2 "{{ hostvars[groups['winclients'][1]]['ansible_ip_addresses'][0] }}":80 check
 
-    - name: Pause for module refresh
-      pause:
-        seconds: 5
-
-    - name: Import IIS Module
-      win_shell: Import-Module WebAdministration
-
-    - name: Create site directory
-      win_file:
-        path: "{{ path }}"
-        state: directory
-
-
-    - name: CF Ansible IIS site
-      win_iis_website:
-        name: "CF Ansible"
-        state: started
-        port: 80
-        hostname: "{{ hostname }}"
-        application_pool: "{{ appool }}"
-        physical_path: "{{ path }}"
-        parameters: 'logfile.directory:c:\sites\logs'
-      register: website
- 
-    - name: Firewall rule to allow smtp on TCP port 25
-      action: win_firewall_rule
-      args:
-        name: http
-        enable: yes
-        state: present
-        localport: 80
-        action: allow
-        direction: In
-        protocol: TCP
+  - name: restart haproxy
+    service:
+      name: haproxy
+      state: restarted
