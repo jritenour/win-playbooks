@@ -1,14 +1,48 @@
 ---
 - hosts: all
   tasks:
+
+  - name: Authenticate to RHV-M
+    ovirt_auth:
+      url: "https://{{ rhvm_addr }}/ovirt-engine/api"
+      username: "{{ rhv_user }}"
+      password: "{{ rhv_pass }}"
+      insecure: true
+    delegate_to: localhost
+
+  - name: List vms
+    ovirt_vm_facts:
+      auth: "{{ ovirt_auth }}"
+      pattern: name=iis*
+    delegate_to: localhost
+
+
+  - name: Get VM API info
+    uri:
+      url: "https://{{ rhvm_addr }}{{ item.href }}/reporteddevices"
+      method: GET
+      return_content: yes
+      user: "{{ rhv_user }}"
+      password: "{{ rhv_pass }}"
+      validate_certs: no
+      body_format: raw
+      headers:
+        Accept: application/json
+    delegate_to: localhost
+    with_items: "{{ ovirt_vms }}"
+    register: vmapi
+
+  - debug: 
+      var: vmapi.results[1].json
+
   - name: Configure haproxy
     blockinfile:
       path: /etc/haproxy/haproxy.cfg
       state: present
       insertafter: EOF
       block: |
-             server iis1 "{{ hostvars[groups['tag_windows'][0]]['ansible_ip_addresses'][0] }}":80 check
-             server iis2 "{{ hostvars[groups['tag_windows'][1]]['ansible_ip_addresses'][0] }}":80 check
+             server iis1 "{{ vmapi.results[0].json.reported_device[0].ips.ip[0].address }}":80 check
+             server iis1 "{{ vmapi.results[1].json.reported_device[0].ips.ip[0].address }}":80 check
 
   - name: restart haproxy
     service:
