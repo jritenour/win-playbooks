@@ -1,5 +1,5 @@
 ---
-- hosts: all
+- hosts: localhost
   tasks:
 
   - name: Authenticate to RHV-M
@@ -8,14 +8,11 @@
       username: "{{ rhv_user }}"
       password: "{{ rhv_pass }}"
       insecure: true
-    delegate_to: localhost
 
   - name: List vms
     ovirt_vm_facts:
       auth: "{{ ovirt_auth }}"
       pattern: name=iis*
-    delegate_to: localhost
-
 
   - name: Get VM API info
     uri:
@@ -28,12 +25,8 @@
       body_format: raw
       headers:
         Accept: application/json
-    delegate_to: localhost
     with_items: "{{ ovirt_vms }}"
     register: vmapi
-
-  - debug: 
-      var: vmapi.results[1].json
 
   - name: Configure haproxy
     blockinfile:
@@ -42,9 +35,11 @@
       insertafter: EOF
       block: |
              server iis1 "{{ vmapi.results[0].json.reported_device[0].ips.ip[0].address }}":80 check
-             server iis1 "{{ vmapi.results[1].json.reported_device[0].ips.ip[0].address }}":80 check
+             server iis1 "{{ vmapi.results[0].json.reported_device[0].ips.ip[0].address }}":80 check
+    delegate_to: 192.168.2.147
 
   - name: restart haproxy
     service:
       name: haproxy
       state: restarted
+    delegate_to: 192.168.2.147
