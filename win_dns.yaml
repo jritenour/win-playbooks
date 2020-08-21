@@ -1,7 +1,7 @@
 ---
 - hosts: all
   tasks:
-  - name: Remove static record
+  - name: Create, update or remove DNS record from AD Zone
     win_dns_record:
       name: "{{ name }}"
       type: "{{ type }}"
