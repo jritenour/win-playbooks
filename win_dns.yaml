@@ -1,3 +1,9 @@
 ---
-hosts: all
-tasks:
+- hosts: all
+  tasks:
+  - name: Remove static record
+    win_dns_record:
+      name: "{{ name }}"
+      type: " {{ type }}"
+      state: "{{ state }}"
+      zone: "{{ zone }}" 
