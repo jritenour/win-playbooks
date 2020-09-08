@@ -1,8 +1,6 @@
 ---
 - hosts: all
-  vars:
-    ansible_port: 5985
-    ansible_connection: winrm
+
 
 
   roles:
